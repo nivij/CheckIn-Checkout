@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "731036034876",
+    "project_id": "codenoralabs-7f980",
+    "storage_bucket": "codenoralabs-7f980.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:731036034876:android:f44fbbdc76f5d41d292039",
+        "android_client_info": {
+          "package_name": "com.example.codenoralabs"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "731036034876-t4ledt7o2sdn2nqruabbqqc9nd8e65q7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.codenoralabs",
+            "certificate_hash": "4d7b238c2f810c2855c95e8cfe72b256cfcecdfe"
+          }
+        },
+        {
+          "client_id": "731036034876-jev39ipdb9lkh3eeqgqa3moo6k32mgsn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC7m3wUWpdnyap9aJdUVs56ZVyiNi5cCXw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "731036034876-jev39ipdb9lkh3eeqgqa3moo6k32mgsn.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "731036034876-1tenkvbksir4iq72qk3skgbsuh0h8jiv.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.codenoralabs"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
