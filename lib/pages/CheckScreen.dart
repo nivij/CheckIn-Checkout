@@ -34,6 +34,7 @@ class _CheckScreenState extends State<CheckScreen> {
   @override
   void initState() {
     super.initState();
+    _getLocation();
     _getRecord();
   }
   void _getLocation() async {
@@ -175,7 +176,7 @@ class _CheckScreenState extends State<CheckScreen> {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [Text("checkout",style:  TextStyle(
+                          children: [Text("checkOUT",style:  TextStyle(
                             color: Colors.black,
                             fontSize: 20 ,
                             fontWeight: FontWeight.bold,
@@ -363,6 +364,7 @@ class _CheckScreenState extends State<CheckScreen> {
                               checkIn =
                                   DateFormat('hh:mm').format(DateTime.now());
                               checkOut = "--/--";
+
                             }
 
                             );
