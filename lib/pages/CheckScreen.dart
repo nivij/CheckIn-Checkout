@@ -161,7 +161,7 @@ class _CheckScreenState extends State<CheckScreen> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [Text("checkIN",style:  TextStyle(
-                            color: Colors.black,
+                            color: Colors.black.withOpacity(0.6),
                             fontSize: 20 ,
                             fontWeight: FontWeight.bold,
                           ),), Text(checkIn,style:  TextStyle(
@@ -177,7 +177,7 @@ class _CheckScreenState extends State<CheckScreen> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [Text("checkOUT",style:  TextStyle(
-                            color: Colors.black,
+                            color: Colors.black.withOpacity(0.6),
                             fontSize: 20 ,
                             fontWeight: FontWeight.bold,
                           ),), Text(checkOut,style:  TextStyle(
@@ -216,7 +216,6 @@ class _CheckScreenState extends State<CheckScreen> {
                 ? Container(
               margin: EdgeInsets.only(top: 24),
               child: Builder(builder: (context) {
-                final GlobalKey<SlideActionState> key = GlobalKey();
                 return SlideAction(
                   innerColor:     Color(0XFF252525),
                 outerColor: Color(0XFF9DFF30),
@@ -264,7 +263,7 @@ class _CheckScreenState extends State<CheckScreen> {
                             .update({
                           'checkIn': checkIn,
                           'checkOut':
-                          DateFormat('hh:mm').format(DateTime.now()),
+                          DateFormat('hh:mm a').format(DateTime.now()),
                           'checkInlocation': location
 
                         });
@@ -273,7 +272,7 @@ class _CheckScreenState extends State<CheckScreen> {
                         setState(() {
                           checkIn = checkIn;
                           checkOut =
-                              DateFormat('hh:mm').format(DateTime.now());
+                              DateFormat('hh:mm a').format(DateTime.now());
                         });
                       } catch (e) {
                         await FirebaseFirestore.instance
@@ -285,14 +284,14 @@ class _CheckScreenState extends State<CheckScreen> {
                             .set({
                           'date':Timestamp.now(),
                           'checkIn':
-                          DateFormat('hh:mm').format(DateTime.now()),
+                          DateFormat('hh:mm a').format(DateTime.now()),
                           'checkOutlocation': location
                         });
 
                         // Update the state to reflect the changes
                         setState(() {
                           checkIn =
-                              DateFormat('hh:mm').format(DateTime.now());
+                              DateFormat('hh:mm a').format(DateTime.now());
                           checkOut = "--/--";
                         }
 
@@ -334,7 +333,7 @@ class _CheckScreenState extends State<CheckScreen> {
                                 .update({
                               'checkIn': checkIn,
                               'checkOut':
-                              DateFormat('hh:mm').format(DateTime.now()),
+                              DateFormat('hh:mm a').format(DateTime.now()),
                               'location': location
 
                             });
@@ -355,14 +354,14 @@ class _CheckScreenState extends State<CheckScreen> {
                                 .set({
                               'date':Timestamp.now(),
                               'checkIn':
-                              DateFormat('hh:mm').format(DateTime.now()),
+                              DateFormat('hh:mm a').format(DateTime.now()),
                               'location': location
                             });
 
                             // Update the state to reflect the changes
                             setState(() {
                               checkIn =
-                                  DateFormat('hh:mm').format(DateTime.now());
+                                  DateFormat('hh:mm a').format(DateTime.now());
                               checkOut = "--/--";
 
                             }
@@ -381,7 +380,7 @@ class _CheckScreenState extends State<CheckScreen> {
               margin: EdgeInsets.only(top: 25,bottom: 20),
               child: Center(child: Text("you have completed this day!!",style: TextStyle(
                 color: Colors.white,
-                fontSize: 23 ,
+                fontSize: 20 ,
                 fontWeight: FontWeight.bold,
               ),)),
             ),
