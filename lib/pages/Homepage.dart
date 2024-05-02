@@ -8,8 +8,6 @@ import 'package:codenoralabs/services/Location_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:intl/intl.dart';
-import 'package:slide_to_act/slide_to_act.dart';
 
 import '../model/user.dart';
 
@@ -28,6 +26,7 @@ class Homepage extends StatefulWidget {
 
 class _HomepageState extends State<Homepage> {
   int currentIndex = 1;
+  String id="";
   List<IconData> navigationIcons = [
     FontAwesomeIcons.calendarAlt,
     FontAwesomeIcons.check,
@@ -36,8 +35,20 @@ class _HomepageState extends State<Homepage> {
 @override
   void initState() {
     super.initState();
+  getId();
     _startLocationService();
   }
+
+  Future<void> getId() async {
+ QuerySnapshot snap =await FirebaseFirestore.instance.collection("Employee").where('id', isEqualTo: Users.username).get();
+  setState(() {
+    Users.Id=snap.docs[0].id;
+  });
+
+}
+
+
+
   void _startLocationService() async{
     LocationService().initialize();
     LocationService().getLongitude().then((value) {
