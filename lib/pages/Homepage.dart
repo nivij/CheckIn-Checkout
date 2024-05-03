@@ -8,8 +8,6 @@ import 'package:codenoralabs/services/Location_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:intl/intl.dart';
-import 'package:slide_to_act/slide_to_act.dart';
 
 import '../model/user.dart';
 
@@ -28,6 +26,7 @@ class Homepage extends StatefulWidget {
 
 class _HomepageState extends State<Homepage> {
   int currentIndex = 1;
+  String id="";
   List<IconData> navigationIcons = [
     FontAwesomeIcons.calendarAlt,
     FontAwesomeIcons.check,
@@ -36,8 +35,34 @@ class _HomepageState extends State<Homepage> {
 @override
   void initState() {
     super.initState();
+  getId();
     _startLocationService();
   }
+
+  Future<void> getId() async {
+    QuerySnapshot snap = await FirebaseFirestore.instance.collection("Employee").where('name', isEqualTo: Users.username).get();
+    if (snap.docs.isNotEmpty) {
+      setState(() {
+        print(snap.docs[0].id);
+        Users.Id = snap.docs[0].id;
+      });
+    } else {
+      print("No documents found for the given query");
+    }
+  }
+
+// Check if the field exists before accessing it
+//   String getCheckOut(DocumentSnapshot doc) {
+//     if (doc.containsKey("checkOut")) {
+//       return doc["checkOut"];
+//     } else {
+//       return ""; // or handle it as you need
+//     }
+//   }
+
+
+
+
   void _startLocationService() async{
     LocationService().initialize();
     LocationService().getLongitude().then((value) {
@@ -64,7 +89,7 @@ backgroundColor: Color(0XFF252525),
       body: IndexedStack(
         index: currentIndex,
         children: [
-        Calendar(),
+          CalendarScreen(),
           CheckScreen(userName: widget.userName, userImage: widget.userImage),
           Profile(),
 

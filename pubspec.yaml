@@ -41,12 +41,15 @@ dependencies:
   get: ^4.6.6
   slide_to_act: ^2.0.2
   intl: ^0.18.1
+  month_year_picker: ^0.3.0+1
   cloud_firestore:
   google_sign_in: ^6.2.1
   font_awesome_flutter: ^10.7.0
   geocoding: ^3.0.0
   location: ^6.0.1
   google_fonts: ^6.2.1
+  flutter_hooks: ^0.20.5
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
