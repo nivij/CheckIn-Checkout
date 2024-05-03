@@ -1,4 +1,3 @@
-// UserData.dart
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:geocoding/geocoding.dart';
@@ -9,7 +8,7 @@ import 'Location_service.dart';
 
 class UserDataService {
   double get latitude => _latitude;
-  double _latitude = 0; // Initialize with default value
+  double _latitude = 0;
   Future<void> getLocation(ValueNotifier<String> location) async {
     await LocationService().initialize();
     double? latitude = await LocationService().getLatitude();
@@ -29,7 +28,8 @@ class UserDataService {
         if (placemark.locality != null) {
           locationString += "${placemark.locality}, ";
         }
-        locationString += "${placemark.postalCode ?? ""}, ${placemark.country}";
+        locationString +=
+        "${placemark.postalCode ?? ""}, ${placemark.country}";
       }
       location.value = locationString;
     } else {

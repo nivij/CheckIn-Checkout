@@ -40,12 +40,26 @@ class _HomepageState extends State<Homepage> {
   }
 
   Future<void> getId() async {
- QuerySnapshot snap =await FirebaseFirestore.instance.collection("Employee").where('id', isEqualTo: Users.username).get();
-  setState(() {
-    Users.Id=snap.docs[0].id;
-  });
+    QuerySnapshot snap = await FirebaseFirestore.instance.collection("Employee").where('name', isEqualTo: Users.username).get();
+    if (snap.docs.isNotEmpty) {
+      setState(() {
+        print(snap.docs[0].id);
+        Users.Id = snap.docs[0].id;
+      });
+    } else {
+      print("No documents found for the given query");
+    }
+  }
 
-}
+// Check if the field exists before accessing it
+//   String getCheckOut(DocumentSnapshot doc) {
+//     if (doc.containsKey("checkOut")) {
+//       return doc["checkOut"];
+//     } else {
+//       return ""; // or handle it as you need
+//     }
+//   }
+
 
 
 
@@ -75,7 +89,7 @@ backgroundColor: Color(0XFF252525),
       body: IndexedStack(
         index: currentIndex,
         children: [
-        Calendar(),
+          CalendarScreen(),
           CheckScreen(userName: widget.userName, userImage: widget.userImage),
           Profile(),
 

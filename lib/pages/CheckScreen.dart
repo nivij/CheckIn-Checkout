@@ -3,14 +3,10 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:geocoding/geocoding.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:slide_to_act/slide_to_act.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
-import '../model/user.dart';
-import '../services/Location_service.dart';
 import '../services/UserData.dart';
 
 class CheckScreen extends HookWidget {
@@ -33,7 +29,6 @@ class CheckScreen extends HookWidget {
     final screenWidth = MediaQuery.of(context).size.width;
 
     useEffect(() {
-      // Call methods from UserDataService to fetch location and record data
       final userDataService = UserDataService();
       userDataService.getLocation(location);
       userDataService.getRecord(checkIn, checkOut);

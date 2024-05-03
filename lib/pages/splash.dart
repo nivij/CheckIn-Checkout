@@ -11,16 +11,17 @@ class SplashScreen extends HookWidget {
   @override
   Widget build(BuildContext context) {
     useEffect(() {
-      // Call methods from UserDataService to fetch location and record data
-      final userDataService = UserDataService();
-      final location = ValueNotifier<String>("");
-      final checkIn = ValueNotifier<String>("");
-      final checkOut = ValueNotifier<String>("");
-
-      userDataService.getLocation(location); // Pass location argument
-      userDataService.getRecord(checkIn, checkOut); // Pass checkIn and checkOut arguments
-
-      // Delay navigation for 2 seconds
+      // final userDataService = UserDataService();
+      // final location = useState("");
+      // final checkIn = useState("");
+      // final checkOut = useState("");
+      //
+      // userDataService.getLocation(location); // Pass location argument
+      // userDataService.getRecord(checkIn, checkOut); // Pass checkIn and checkOut arguments
+      // // print("Location: ${location.value}");
+      // // print("Check-in: ${checkIn.value}");
+      // // print("Check-out: ${checkOut.value}");
+      // // Delay navigation for 2 seconds
       Future.delayed(Duration(seconds: 2), () {
         navigateUser();
       });
@@ -39,7 +40,7 @@ class SplashScreen extends HookWidget {
             SizedBox(
               width: 100,
               child: LinearProgressIndicator(
-                backgroundColor: Colors.grey,
+                // backgroundColor: Colors.grey,
                 valueColor: AlwaysStoppedAnimation<Color>(Color(0XFF9DFF30)),
               ),
             ),
