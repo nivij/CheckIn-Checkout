@@ -10,32 +10,37 @@ class UserDataService {
   double get latitude => _latitude;
   double _latitude = 0;
   Future<void> getLocation(ValueNotifier<String> location) async {
-    await LocationService().initialize();
-    double? latitude = await LocationService().getLatitude();
-    double? longitude = await LocationService().getLongitude();
-    if (latitude != null && longitude != null) {
-      List<Placemark> placemarks =
-      await placemarkFromCoordinates(latitude, longitude);
-      String locationString = "";
-      if (placemarks.isNotEmpty) {
-        final placemark = placemarks[0];
-        if (placemark.street != null) {
-          locationString += "${placemark.street}, ";
+    try {
+      final locationService = LocationService();
+      await locationService.initialize();
+      double? latitude = await locationService.getLatitude();
+      double? longitude = await locationService.getLongitude();
+
+      if (latitude != null && longitude != null) {
+        List<Placemark> placemarks = await placemarkFromCoordinates(latitude, longitude);
+        String locationString = "";
+        if (placemarks.isNotEmpty) {
+          final placemark = placemarks[0];
+          if (placemark.street != null) {
+            locationString += "${placemark.street}, ";
+          }
+          if (placemark.administrativeArea != null) {
+            locationString += "${placemark.administrativeArea}, ";
+          }
+          if (placemark.locality != null) {
+            locationString += "${placemark.locality}, ";
+          }
+          locationString += "${placemark.postalCode ?? ""}, ${placemark.country}";
         }
-        if (placemark.administrativeArea != null) {
-          locationString += "${placemark.administrativeArea}, ";
-        }
-        if (placemark.locality != null) {
-          locationString += "${placemark.locality}, ";
-        }
-        locationString +=
-        "${placemark.postalCode ?? ""}, ${placemark.country}";
+        location.value = locationString;
+      } else {
+        print("Failed to get location");
       }
-      location.value = locationString;
-    } else {
-      print("Failed to get location");
+    } catch (e) {
+      print("Error getting location: $e");
     }
   }
+
 
   Future<void> getRecord(
       ValueNotifier<String> checkIn,

@@ -71,26 +71,29 @@ class _CalendarScreenState extends State<CalendarScreen> {
                           return Theme(
                             data: Theme.of(context).copyWith(
                               colorScheme: ColorScheme.light(
-                                primary: primary,
-                                secondary: primary,
-                                onSecondary: Colors.white,
+                                primary:  Color(0XFF9DFF30),
+                                secondary: Color(0XFF9DFF30),
+                                onSecondary:  Color(0XFF252525),
                               ),
                               textButtonTheme: TextButtonThemeData(
                                 style: TextButton.styleFrom(
-                                  // primary: primary,
+                                  textStyle: TextStyle(
+                                    color: Color(0XFF252525),
+                                  ),
+                                  foregroundColor: Color(0XFF252525),
                                 ),
                               ),
                               textTheme: const TextTheme(
                                 headline4: TextStyle(
-                                  color: Color(0XFF9DFF30),
+                                  color: Color(0XFF252525),
                                   fontFamily: "NexaBold",
                                 ),
                                 overline: TextStyle(
-                                  color: Color(0XFF9DFF30),
+                                  color: Colors.red,
                                   fontFamily: "NexaBold",
                                 ),
                                 button: TextStyle(
-                                  color: Color(0XFF9DFF30),
+                                  color: Color(0XFF252525),
                                   fontFamily: "NexaBold",
                                 ),
                               ),
