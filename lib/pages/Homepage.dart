@@ -28,9 +28,14 @@ class _HomepageState extends State<Homepage> {
   int currentIndex = 1;
   String id="";
   List<IconData> navigationIcons = [
-    FontAwesomeIcons.calendarAlt,
-    FontAwesomeIcons.check,
+    FontAwesomeIcons.solidCalendarDays,
+    FontAwesomeIcons.checkToSlot,
     FontAwesomeIcons.userAlt
+  ];
+  List<String> navigationText = [
+    "Calendar",
+    "Attendance",
+    "Profile",
   ];
 @override
   void initState() {
@@ -120,9 +125,19 @@ backgroundColor: Color(0XFF252525),
                         });
                       },
                         child: Center(
-                  child: Icon(navigationIcons[i],
-                 color: i== currentIndex? Color(0XFF9DFF30) :Colors.black,
-                    size: i== currentIndex? 30 :25,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(navigationIcons[i],
+                                       color: i== currentIndex? Color(0XFF9DFF30) :Colors.black,
+                        size: i== currentIndex? 29 :20,
+                      ),
+                      Text(navigationText[i],style: TextStyle( color: i== currentIndex? Color(0XFF9DFF30) :Colors.black,
+                        fontSize: i== currentIndex? 12 :10,
+                        fontWeight: FontWeight.bold
+                      ),)
+                    ],
                   ),
                 )))
               }

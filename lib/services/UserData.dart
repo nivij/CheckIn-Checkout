@@ -39,6 +39,8 @@ class UserDataService {
     } catch (e) {
       print("Error getting location: $e");
     }
+
+
   }
 
 
@@ -112,6 +114,50 @@ class UserDataService {
       });
       checkIn.value = checkInValue;
       checkOut.value = "--/--";
+    }
+  }
+
+  Future<void> addLeaveRecord(String date) async {
+    String employeeId = await getEmployeeDocumentId();
+    await FirebaseFirestore.instance
+        .collection("Leave")
+        .add({
+      'employeeId': employeeId,
+      'date': Timestamp.now(),
+      'leaveType': 'Missed Check-In', // Replace with appropriate leave type
+      'reason': 'Automatic for missed check-in on $date',
+      'status': 'Pending', // Replace with appropriate leave status
+    });
+  }
+
+  // Helper function to get employee document ID
+  Future<String> getEmployeeDocumentId() async {
+    String username = Users.username;
+    QuerySnapshot snap = await FirebaseFirestore.instance
+        .collection("Employee")
+        .where("name", isEqualTo: username)
+        .get();
+    if (snap.docs.isNotEmpty) {
+      return snap.docs[0].id;
+    } else {
+      throw Exception("Employee document not found!");
+    }
+  }
+
+  // New function to handle missed check-ins (moved before usage)
+  Future<void> checkForMissedCheckIn() async {
+    String today = DateFormat("d MMMM yyyy").format(DateTime.now());
+    DocumentReference docRef = FirebaseFirestore.instance
+        .collection("Employee")
+        .doc(await getEmployeeDocumentId()) // Get employee ID
+        .collection("Record")
+        .doc(today);
+
+    // Check if record exists for today
+    DocumentSnapshot snapshot = await docRef.get();
+    if (!snapshot.exists) {
+      // No record found, consider it a missed check-in
+      await addLeaveRecord(today);
     }
   }
 }

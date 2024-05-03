@@ -2,28 +2,18 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:month_year_picker/month_year_picker.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 
 import '../model/user.dart';
 
-class CalendarScreen extends StatefulWidget {
+class CalendarScreen extends HookWidget {
   const CalendarScreen({Key? key}) : super(key: key);
 
   @override
-  _CalendarScreenState createState() => _CalendarScreenState();
-}
-
-class _CalendarScreenState extends State<CalendarScreen> {
-  double screenHeight = 0;
-  double screenWidth = 0;
-
-  Color primary = const Color(0xffeef444c);
-
-  String _month = DateFormat('MMMM').format(DateTime.now());
-
-  @override
   Widget build(BuildContext context) {
-    screenHeight = MediaQuery.of(context).size.height;
-    screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+    final screenWidth = MediaQuery.of(context).size.width;
+    final _month = useState(DateFormat('MMMM').format(DateTime.now()));
 
     return Scaffold(
       backgroundColor: Color(0XFF252525),
@@ -39,6 +29,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
                 style: TextStyle(
                   color: Color(0XFF9DFF30),
                   fontFamily: "NexaBold",
+                  fontWeight: FontWeight.bold,
                   fontSize: screenWidth / 18,
                 ),
               ),
@@ -49,10 +40,11 @@ class _CalendarScreenState extends State<CalendarScreen> {
                   alignment: Alignment.centerLeft,
                   margin: const EdgeInsets.only(top: 32),
                   child: Text(
-                    _month,
+                    _month.value,
                     style: TextStyle(
                       color: Color(0XFF9DFF30),
                       fontFamily: "NexaBold",
+                      fontWeight: FontWeight.bold,
                       fontSize: screenWidth / 18,
                     ),
                   ),
@@ -71,9 +63,9 @@ class _CalendarScreenState extends State<CalendarScreen> {
                           return Theme(
                             data: Theme.of(context).copyWith(
                               colorScheme: ColorScheme.light(
-                                primary:  Color(0XFF9DFF30),
+                                primary: Color(0XFF9DFF30),
                                 secondary: Color(0XFF9DFF30),
-                                onSecondary:  Color(0XFF252525),
+                                onSecondary: Color(0XFF252525),
                               ),
                               textButtonTheme: TextButtonThemeData(
                                 style: TextButton.styleFrom(
@@ -104,9 +96,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
                       );
 
                       if (month != null) {
-                        setState(() {
-                          _month = DateFormat('MMMM').format(month);
-                        });
+                        _month.value = DateFormat('MMMM').format(month);
                       }
                     },
                     child: Text(
@@ -114,6 +104,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
                       style: TextStyle(
                         color: Color(0XFF9DFF30),
                         fontFamily: "NexaBold",
+                        fontWeight: FontWeight.bold,
                         fontSize: screenWidth / 18,
                       ),
                     ),
@@ -122,35 +113,40 @@ class _CalendarScreenState extends State<CalendarScreen> {
               ],
             ),
             SizedBox(
-              height: screenHeight / 1.48,
+              height: screenHeight / 1.43,
               child: StreamBuilder<QuerySnapshot>(
                 stream: FirebaseFirestore.instance
                     .collection("Employee")
                     .doc(Users.Id)
                     .collection("Record")
                     .snapshots(),
-                builder:
-                    (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                builder: (BuildContext context,
+                    AsyncSnapshot<QuerySnapshot> snapshot) {
                   if (snapshot.hasData) {
                     final snap = snapshot.data!.docs;
                     return ListView.builder(
                       itemCount: snap.length,
                       itemBuilder: (context, index) {
-                        final data = snap[index].data() as Map<String, dynamic>;
+                        final data =
+                        snap[index].data() as Map<String, dynamic>;
 
                         // Check if 'checkOut' field exists and is not equal to '--/--'
-                        if (data.containsKey('checkOut') && data['checkOut'] != "--/--") {
-                          return DateFormat('MMMM').format(data['date'].toDate()) ==
-                              _month
+                        if (data.containsKey('checkOut') &&
+                            data['checkOut'] != "--/--") {
+                          return DateFormat('MMMM')
+                              .format(data['date'].toDate()) ==
+                              _month.value
                               ? Container(
                             margin: EdgeInsets.only(
-                                top: index > 0 ? 12 : 0, left: 6, right: 6),
+                                top: index > 1 ? 20 : 0,
+                                left: 6,
+                                right: 6),
                             height: 150,
                             decoration: const BoxDecoration(
                               color: Colors.white,
                               boxShadow: [
                                 BoxShadow(
-                                  color: Colors.black26,
+                                  color: Color(0XFF9DFF30),
                                   blurRadius: 10,
                                   offset: Offset(2, 2),
                                 ),
@@ -160,11 +156,13 @@ class _CalendarScreenState extends State<CalendarScreen> {
                             ),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
+                              crossAxisAlignment:
+                              CrossAxisAlignment.center,
                               children: [
                                 Expanded(
                                   child: Container(
-                                    margin: const EdgeInsets.only(),
+                                    margin:
+                                    const EdgeInsets.only(right: 10),
                                     decoration: BoxDecoration(
                                       color: Color(0XFF9DFF30),
                                       borderRadius: const BorderRadius.all(
@@ -172,9 +170,10 @@ class _CalendarScreenState extends State<CalendarScreen> {
                                     ),
                                     child: Center(
                                       child: Text(
-                                        DateFormat('EE\ndd')
-                                            .format(data['date'].toDate()),
+                                        DateFormat('EE\ndd').format(
+                                            data['date'].toDate()),
                                         style: TextStyle(
+                                          fontWeight: FontWeight.bold,
                                           fontFamily: "NexaBold",
                                           fontSize: screenWidth / 19,
                                           color: Color(0XFF252525),
@@ -185,12 +184,15 @@ class _CalendarScreenState extends State<CalendarScreen> {
                                 ),
                                 Expanded(
                                   child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    mainAxisAlignment:
+                                    MainAxisAlignment.center,
+                                    crossAxisAlignment:
+                                    CrossAxisAlignment.center,
                                     children: [
                                       Text(
                                         "Check In",
                                         style: TextStyle(
+                                          fontWeight: FontWeight.bold,
                                           fontFamily: "NexaRegular",
                                           fontSize: screenWidth / 22,
                                           color: Colors.black54,
@@ -199,6 +201,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
                                       Text(
                                         data['checkIn'],
                                         style: TextStyle(
+                                          fontWeight: FontWeight.bold,
                                           fontFamily: "NexaBold",
                                           fontSize: screenWidth / 20,
                                         ),
@@ -208,12 +211,15 @@ class _CalendarScreenState extends State<CalendarScreen> {
                                 ),
                                 Expanded(
                                   child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    mainAxisAlignment:
+                                    MainAxisAlignment.center,
+                                    crossAxisAlignment:
+                                    CrossAxisAlignment.center,
                                     children: [
                                       Text(
                                         "Check Out",
                                         style: TextStyle(
+                                          fontWeight: FontWeight.bold,
                                           fontFamily: "NexaRegular",
                                           fontSize: screenWidth / 22,
                                           color: Colors.black54,
@@ -222,6 +228,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
                                       Text(
                                         data['checkOut'],
                                         style: TextStyle(
+                                          fontWeight: FontWeight.bold,
                                           fontFamily: "NexaBold",
                                           fontSize: screenWidth / 20,
                                         ),
@@ -235,11 +242,14 @@ class _CalendarScreenState extends State<CalendarScreen> {
                               : const SizedBox();
                         } else {
                           // Handle case where 'checkOut' field doesn't exist or is '--/--'
-                          return DateFormat('MMMM').format(data['date'].toDate()) ==
-                              _month
+                          return DateFormat('MMMM')
+                              .format(data['date'].toDate()) ==
+                              _month.value
                               ? Container(
                             margin: EdgeInsets.only(
-                                top: index > 0 ? 12 : 0, left: 6, right: 6),
+                                top: index > 0 ? 12 : 0,
+                                left: 6,
+                                right: 6),
                             height: 150,
                             decoration: const BoxDecoration(
                               color: Colors.white,
@@ -255,7 +265,8 @@ class _CalendarScreenState extends State<CalendarScreen> {
                             ),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
+                              crossAxisAlignment:
+                              CrossAxisAlignment.center,
                               children: [
                                 Expanded(
                                   child: Container(
@@ -267,8 +278,8 @@ class _CalendarScreenState extends State<CalendarScreen> {
                                     ),
                                     child: Center(
                                       child: Text(
-                                        DateFormat('EE\ndd')
-                                            .format(data['date'].toDate()),
+                                        DateFormat('EE\ndd').format(
+                                            data['date'].toDate()),
                                         style: TextStyle(
                                           fontFamily: "NexaBold",
                                           fontSize: screenWidth / 19,
@@ -280,8 +291,10 @@ class _CalendarScreenState extends State<CalendarScreen> {
                                 ),
                                 Expanded(
                                   child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    mainAxisAlignment:
+                                    MainAxisAlignment.center,
+                                    crossAxisAlignment:
+                                    CrossAxisAlignment.center,
                                     children: [
                                       Text(
                                         "Check In",
@@ -303,8 +316,10 @@ class _CalendarScreenState extends State<CalendarScreen> {
                                 ),
                                 Expanded(
                                   child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    mainAxisAlignment:
+                                    MainAxisAlignment.center,
+                                    crossAxisAlignment:
+                                    CrossAxisAlignment.center,
                                     children: [
                                       Text(
                                         "Check Out",
