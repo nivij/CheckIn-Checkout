@@ -7,6 +7,7 @@ import 'package:intl/intl.dart';
 import 'package:slide_to_act/slide_to_act.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
+import '../constant/mediaquery.dart';
 import '../services/UserData.dart';
 
 class CheckScreen extends HookWidget {
@@ -24,9 +25,6 @@ class CheckScreen extends HookWidget {
     final checkIn = useState("--/--");
     final checkOut = useState("--/--");
     final location = useState("");
-
-    final screenHeight = MediaQuery.of(context).size.height;
-    final screenWidth = MediaQuery.of(context).size.width;
 
     useEffect(() {
       final userDataService = UserDataService();
@@ -49,13 +47,13 @@ class CheckScreen extends HookWidget {
           ),
         ),
       ),
-      body: SingleChildScrollView(
+      body: Padding(
         padding: EdgeInsets.all(20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(
-              height: 30,
+              height: MyMediaQuery.screenHeight(context) * 0.02,
             ),
             Row(
               children: [
@@ -64,7 +62,7 @@ class CheckScreen extends HookWidget {
                   backgroundImage: NetworkImage(userImage),
                 ),
                 SizedBox(
-                  width: 20 * 2,
+                  width: MyMediaQuery.screenWidth(context) * 0.1,
                 ),
                 Text(
                   " $userName!",
@@ -76,10 +74,10 @@ class CheckScreen extends HookWidget {
                 ),
               ],
             ),
-            SizedBox(height: 20),
+            SizedBox(height: MyMediaQuery.screenHeight(context) * 0.02),
             Container(
               margin: EdgeInsets.only(top: 12, bottom: 30),
-              height: 150,
+              height: MyMediaQuery.screenHeight(context) * 0.2,
               decoration: BoxDecoration(
                 color: Colors.white,
                 boxShadow: [
@@ -166,7 +164,7 @@ class CheckScreen extends HookWidget {
                 );
               },
             ),
-            SizedBox(height: 10),
+            SizedBox(height: MyMediaQuery.screenHeight(context) * 0.01),
             Container(
               alignment: Alignment.centerLeft,
               child: Text(
@@ -196,10 +194,12 @@ class CheckScreen extends HookWidget {
                   onSubmit: () async {
                     final userDataService = UserDataService();
                     if (userDataService.latitude != 0) {
-                      userDataService.updateCheckOut(location, checkIn, checkOut);
+                      userDataService.updateCheckOut(
+                          location, checkIn, checkOut);
                     } else {
                       Timer(Duration(seconds: 1), () async {
-                        userDataService.updateCheckOut(location, checkIn, checkOut);
+                        userDataService.updateCheckOut(
+                            location, checkIn, checkOut,);
                       });
                     }
                   },
@@ -219,7 +219,7 @@ class CheckScreen extends HookWidget {
                 ),
               ),
             ),
-            SizedBox(height: 28),
+            SizedBox(height: MyMediaQuery.screenHeight(context) * 0.02),
             location.value != ""
                 ? Text(
               "Location :  " + location.value,
