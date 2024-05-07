@@ -4,12 +4,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:shimmer/shimmer.dart';
-import '../constant/mediaquery.dart';
 import '../model/user.dart';
-import 'Homepage.dart';
 import 'loginPage.dart';
-import 'package:sign_in_button/sign_in_button.dart';
+
 
 class Profile extends HookWidget {
   @override
@@ -59,7 +56,8 @@ class Profile extends HookWidget {
                     Map<String, dynamic> data = document.data() as Map<String, dynamic>;
                     return ListTile(
                       leading: CircleAvatar(
-                        backgroundImage: NetworkImage(data['photoURL'] ?? ''),
+                        backgroundColor:Colors.white38,
+                        // backgroundImage: NetworkImage(data['photoURL'] ?? ''),
                       ),
                       title: Text(data['name'] ?? '', style: TextStyle(color: Colors.white)),
                       subtitle: Text('Employee ID: ${document.id ?? ''}', style: TextStyle(color: Color(0XFF9DFF30))),
@@ -101,72 +99,7 @@ class Profile extends HookWidget {
           ],
         ),
       ),
-      bottomNavigationBar: isLoading.value // Show or hide the loading indicator based on isLoading
-          ? Positioned(
-        left: 0,
-        right: 0,
-        bottom: 0,
-        child: SizedBox(
-          width: MyMediaQuery.screenWidth(context) * 0.75,
-          child: LinearProgressIndicator(
-            backgroundColor: Colors.grey,
-            valueColor: AlwaysStoppedAnimation<Color>(Color(0XFF9DFF30)),
-          ),
-        ),
-      )
-          : SizedBox(),
-    );
-  }
-  Widget _buildLoadingShimmer() {
-    return Shimmer.fromColors(
-      baseColor: Colors.black,
-      highlightColor: Colors.black,
-      child: ListView.builder(
-        shrinkWrap: true,
-        itemCount: 5, // You can adjust the number of shimmer items as per your preference
-        itemBuilder: (_, __) => ListTile(
-          leading: CircleAvatar(
-            backgroundColor: Colors.white,
-            radius: 20,
-          ),
-          title: Container(
-            width: 100,
-            height: 15,
-            color: Colors.white,
-            margin: EdgeInsets.only(bottom: 5),
-          ),
-          subtitle: Container(
-            width: 200,
-            height: 10,
-            color: Colors.white,
-          ),
-        ),
-      ),
-    );
-  }
 
-  Widget _buildProfileImageShimmer() {
-    return Shimmer.fromColors(
-      baseColor: Colors.grey[300]!,
-      highlightColor: Colors.grey[100]!,
-      child: CircleAvatar(
-        backgroundColor: Colors.white,
-        radius: 20,
-      ),
     );
   }
-
-  Widget _buildNameShimmer() {
-    return Shimmer.fromColors(
-      baseColor: Colors.grey[300]!,
-      highlightColor: Colors.grey[100]!,
-      child: Container(
-        width: 100,
-        height: 15,
-        color: Colors.white,
-        margin: EdgeInsets.only(bottom: 5),
-      ),
-    );
-  }
-
 }
