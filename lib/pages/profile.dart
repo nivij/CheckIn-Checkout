@@ -30,7 +30,7 @@ class Profile extends HookWidget {
         backgroundColor: Color(0XFF252525),
         title: const Text(
           "Employees",
-          style: TextStyle(color: Color(0XFF9DFF30)),
+          style: TextStyle(color: Color(0XFF9DFF30),fontWeight: FontWeight.bold),
         ),
       ),
       body: SingleChildScrollView(
@@ -59,8 +59,8 @@ class Profile extends HookWidget {
                         backgroundColor:Colors.white38,
                         // backgroundImage: NetworkImage(data['photoURL'] ?? ''),
                       ),
-                      title: Text(data['name'] ?? '', style: TextStyle(color: Colors.white)),
-                      subtitle: Text('Employee ID: ${document.id ?? ''}', style: TextStyle(color: Color(0XFF9DFF30))),
+                      title: Text(data['name'] ?? '', style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold)),
+                      subtitle: Text('Employee ID: ${document.id ?? ''}', style: TextStyle(color: Color(0XFF9DFF30,),fontWeight: FontWeight.bold)),
                     );
                   }).toList(),
                 );
@@ -93,7 +93,7 @@ class Profile extends HookWidget {
                   // Navigate to LoginPage using GetX
                   Get.offAll(LoginPage());
                 },
-                child: Text('Logout'),
+                child: Text('Logout',style: TextStyle(fontWeight: FontWeight.bold,color: Color(0XFF252525)),),
               ),
             ),
           ],
