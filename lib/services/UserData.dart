@@ -9,6 +9,7 @@ import 'Location_service.dart';
 class UserDataService {
   double get latitude => _latitude;
   double _latitude = 0;
+
   Future<void> getLocation(ValueNotifier<String> location) async {
     try {
       final locationService = LocationService();
@@ -17,20 +18,32 @@ class UserDataService {
       double? longitude = await locationService.getLongitude();
 
       if (latitude != null && longitude != null) {
-        List<Placemark> placemarks = await placemarkFromCoordinates(latitude, longitude);
+        List<Placemark> placemarks =
+        await placemarkFromCoordinates(latitude, longitude);
         String locationString = "";
         if (placemarks.isNotEmpty) {
-          final placemark = placemarks[0];
-          if (placemark.street != null) {
-            locationString += "${placemark.street}, ";
+          bool isOfficeLocation = false;
+          for (Placemark placemark in placemarks) {
+            if (placemark.street == '5RX9+84X') {
+              locationString = "At office";
+              isOfficeLocation = true;
+              break;
+            }
           }
-          if (placemark.administrativeArea != null) {
-            locationString += "${placemark.administrativeArea}, ";
+          if (!isOfficeLocation) {
+            final placemark = placemarks[0]; // Get the first placemark if it's not the office location
+            if (placemark.street != null) {
+              locationString += "${placemark.street}, ";
+            }
+            if (placemark.administrativeArea != null) {
+              locationString += "${placemark.administrativeArea}, ";
+            }
+            if (placemark.locality != null) {
+              locationString += "${placemark.locality}, ";
+            }
+            locationString +=
+            "${placemark.postalCode ?? ""}, ${placemark.country}";
           }
-          if (placemark.locality != null) {
-            locationString += "${placemark.locality}, ";
-          }
-          locationString += "${placemark.postalCode ?? ""}, ${placemark.country}";
         }
         location.value = locationString;
       } else {
@@ -40,7 +53,6 @@ class UserDataService {
       print("Error getting location: $e");
     }
   }
-
 
   Future<void> getRecord(
       ValueNotifier<String> checkIn,
@@ -112,6 +124,48 @@ class UserDataService {
       });
       checkIn.value = checkInValue;
       checkOut.value = "--/--";
+    }
+  }
+
+  Future<void> addLeaveRecord(String date) async {
+    String employeeId = await getEmployeeDocumentId();
+    await FirebaseFirestore.instance.collection("Leave").add({
+      'employeeId': employeeId,
+      'date': Timestamp.now(),
+      'leaveType': 'Missed Check-In', // Replace with appropriate leave type
+      'reason': 'Automatic for missed check-in on $date',
+      'status': 'Pending', // Replace with appropriate leave status
+    });
+  }
+
+  // Helper function to get employee document ID
+  Future<String> getEmployeeDocumentId() async {
+    String username = Users.username;
+    QuerySnapshot snap = await FirebaseFirestore.instance
+        .collection("Employee")
+        .where("name", isEqualTo: username)
+        .get();
+    if (snap.docs.isNotEmpty) {
+      return snap.docs[0].id;
+    } else {
+      throw Exception("Employee document not found!");
+    }
+  }
+
+  // New function to handle missed check-ins (moved before usage)
+  Future<void> checkForMissedCheckIn() async {
+    String today = DateFormat("d MMMM yyyy").format(DateTime.now());
+    DocumentReference docRef = FirebaseFirestore.instance
+        .collection("Employee")
+        .doc(await getEmployeeDocumentId()) // Get employee ID
+        .collection("Record")
+        .doc(today);
+
+    // Check if record exists for today
+    DocumentSnapshot snapshot = await docRef.get();
+    if (!snapshot.exists) {
+      // No record found, consider it a missed check-in
+      await addLeaveRecord(today);
     }
   }
 }
